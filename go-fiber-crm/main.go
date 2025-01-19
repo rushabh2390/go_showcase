@@ -2,24 +2,27 @@ package main
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	"github.com/gofiber/swagger"
 	"github.com/rushabh2390/go_showcase/go-fiber-crm/database"
+	_ "github.com/rushabh2390/go_showcase/go-fiber-crm/docs"
 	"github.com/rushabh2390/go_showcase/go-fiber-crm/lead"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
 func setupRoutes(app *fiber.App) {
+	app.Get("/api/v1/lead/:id", lead.GetLead)
 	app.Get("/api/v1/lead", lead.GetLeads)
-	app.Get("/api/v1/lead:id", lead.GetLead)
 	app.Post("/api/v1/lead", lead.NewLeads)
-	app.Delete("/api/v1/lead:id", lead.DeleteLeads)
+	app.Delete("/api/v1/lead/:id", lead.DeleteLeads)
 }
 
 func initDatabase() {
 	var err error
-	database.DBConn, err = gorm.Open("sqlite3", "leads.db")
+	database.DBConn, err = gorm.Open(sqlite.Open("leads.db"), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
 	}
@@ -27,10 +30,12 @@ func initDatabase() {
 	database.DBConn.AutoMigrate(&lead.Lead{})
 	fmt.Println("Database Migrated")
 }
+
 func main() {
 	app := fiber.New()
 	initDatabase()
 	setupRoutes(app)
-	app.Listen("8000")
-	defer database.DBConn.Close()
+	app.Get("/swagger/*", swagger.HandlerDefault) // default
+	log.Fatal(app.Listen(":8000"))
+	// defer database.DBConn.Close()
 }

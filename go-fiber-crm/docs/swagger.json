@@ -1,0 +1,196 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/api/v1/lead": {
+            "get": {
+                "description": "Get all leads",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "leads"
+                ],
+                "summary": "Get leads",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/lead.DisplayLead"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a new lead",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "leads"
+                ],
+                "summary": "Create a new lead",
+                "parameters": [
+                    {
+                        "description": "New Lead",
+                        "name": "lead",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/lead.InputLead"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/lead.CreateLeadResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/lead/{id}": {
+            "get": {
+                "description": "Get a lead by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "leads"
+                ],
+                "summary": "Get a lead",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Lead ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/lead.DisplayLead"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete a lead by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "leads"
+                ],
+                "summary": "Delete a lead",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Lead ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/lead.CreateLeadResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/lead.CreateLeadResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "lead.CreateLeadResponse": {
+            "type": "object",
+            "properties": {
+                "lead": {
+                    "$ref": "#/definitions/lead.DisplayLead"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "lead.DisplayLead": {
+            "type": "object",
+            "properties": {
+                "company": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "lead.InputLead": {
+            "type": "object",
+            "properties": {
+                "company": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
